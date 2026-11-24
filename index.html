@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10264d">
+  <meta name="description" content="Infografía interactiva sobre el uso del lenguaje R en el desarrollo científico, el análisis de datos y la optimización de procesos.">
+  <title>R en el desarrollo científico</title>
+  <style>
+    :root {
+      --navy: #10244b;
+      --navy-2: #17385f;
+      --blue: #0966c4;
+      --blue-2: #1478d1;
+      --teal: #14b7ad;
+      --teal-dark: #069f9c;
+      --ink: #10182c;
+      --paper: #fffdf8;
+      --pale-blue: #e4f1f8;
+      --pale-mint: #e0f6f2;
+      --soft: #f4f8f9;
+      --line: rgba(16, 36, 75, .09);
+      --shadow: 0 14px 35px rgba(20, 48, 83, .065);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.45;
+    }
+    .page {
+      position: relative;
+      isolation: isolate;
+      width: min(100%, 1120px);
+      margin: 0 auto;
+      padding: clamp(24px, 5vw, 54px) clamp(18px, 4.5vw, 50px) 32px;
+      overflow: hidden;
+    }
+    .corner { position: absolute; z-index: -1; pointer-events: none; }
+    .corner-top {
+      top: 0; right: 0; width: 175px; height: 150px;
+      background: linear-gradient(135deg, transparent 0 33%, #102b54 33% 65%, #16b5ad 65% 100%);
+      clip-path: polygon(22% 0,100% 0,100% 100%);
+      opacity: .98;
+    }
+    .corner-bottom {
+      bottom: 0; left: 0; width: 128px; height: 112px;
+      background: linear-gradient(45deg, #102b54 0 48%, #1683c8 48% 72%, transparent 72%);
+      clip-path: polygon(0 0,100% 100%,0 100%);
+    }
+    .dots {
+      position: absolute; width: 82px; height: 42px; opacity: .9;
+      background-image: radial-gradient(circle, var(--teal-dark) 3px, transparent 3.5px);
+      background-size: 22px 22px;
+      pointer-events: none;
+    }
+    .dots.top { top: 118px; right: 25px; }
+    .dots.bottom { right: 24px; bottom: 45px; }
+
+    header { position: relative; padding-right: 70px; margin-bottom: 26px; }
+    h1 {
+      max-width: 850px;
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(2.35rem, 6.1vw, 4.9rem);
+      font-weight: 900;
+      letter-spacing: -.055em;
+      line-height: .99;
+      text-transform: uppercase;
+    }
+    h1 .r-mark { color: var(--blue); }
+    .title-rule {
+      width: 126px; height: 9px; border-radius: 20px;
+      margin: 17px 0 9px; background: var(--teal);
+    }
+    .subtitle {
+      margin: 0; color: #17162a; font-size: clamp(1.25rem, 3vw, 2.4rem);
+      font-weight: 450; font-style: italic; letter-spacing: -.025em;
+    }
+
+    .intro-grid {
+      display: grid; grid-template-columns: minmax(220px, .78fr) minmax(0, 2fr);
+      gap: 24px; align-items: center; margin: 24px 0 26px;
+    }
+    .r-visual {
+      min-height: 190px; display: grid; place-items: center; position: relative;
+    }
+    .r-orbit {
+      position: absolute; width: min(84%, 260px); height: 150px;
+      border: 22px solid #b8b9bc; border-right-color: #898d94;
+      border-bottom-color: #d3d4d5; border-radius: 50%; transform: rotate(-8deg);
+    }
+    .r-letter {
+      position: relative; color: var(--blue); font-size: clamp(7rem, 15vw, 10rem);
+      font-weight: 950; line-height: .85; letter-spacing: -.09em;
+      text-shadow: 0 5px 0 rgba(5, 62, 132, .06);
+    }
+    .intro-card {
+      position: relative; padding: 22px 28px 24px 30px;
+      background: linear-gradient(115deg, #e3f0f7, #dcecf4);
+      border-radius: 34px; box-shadow: var(--shadow);
+    }
+    .intro-card::before {
+      content: ""; position: absolute; left: -27px; top: 20px; bottom: 20px;
+      width: 5px; border-radius: 10px; background: var(--teal);
+    }
+    .pill-title {
+      display: inline-block; margin: -3px 0 8px; padding: 5px 25px 7px;
+      color: white; background: var(--navy); border-radius: 32px;
+      font-size: clamp(1.5rem, 3.7vw, 2.45rem); font-weight: 850;
+      line-height: 1.15; letter-spacing: -.035em;
+    }
+    .intro-card p { margin: 0; font-size: clamp(1.12rem, 2.55vw, 1.75rem); line-height: 1.3; }
+
+    .topics { display: grid; gap: 20px; }
+    .topic {
+      display: grid; grid-template-columns: minmax(155px,  .72fr) minmax(0, 2.25fr);
+      gap: 16px; align-items: stretch;
+    }
+    .icon-panel {
+      display: grid; place-items: center; min-height: 174px;
+      border-radius: 27px; background: linear-gradient(140deg, #e4f8f4, #d8f2ee);
+      padding: 19px;
+    }
+    .icon-panel svg { width: min(100%, 168px); height: 138px; overflow: visible; }
+    .topic-content {
+      min-width: 0; overflow: hidden; border-radius: 24px;
+      background: linear-gradient(110deg, #f1f7f8 0%, #f7f9f8 100%);
+      box-shadow: 0 8px 25px rgba(27, 59, 87, .035);
+    }
+    .topic h2 {
+      margin: 0; padding: 7px 28px 9px; color: white;
+      background: linear-gradient(100deg, #19385f, #10264d);
+      border-radius: 22px; font-size: clamp(1.45rem, 3.6vw, 2.5rem);
+      font-weight: 850; letter-spacing: -.035em; line-height: 1.1;
+    }
+    .topic ul { margin: 0; padding: 9px 22px 14px 62px; list-style: none; }
+    .topic li { position: relative; margin: 2px 0; font-size: clamp(1rem, 2.35vw, 1.62rem); line-height: 1.45; }
+    .topic li::before {
+      content: ""; position: absolute; left: -34px; top: .58em;
+      width: 15px; height: 15px; border-radius: 50%; background: var(--teal);
+    }
+    .topic li strong { font-weight: 800; }
+
+    .process {
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 42px; align-items: center; margin: 34px 7px 28px;
+    }
+    .step {
+      position: relative; min-height: 146px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 7px; padding: 15px 8px;
+      color: white; text-align: center; border-radius: 27px;
+      background: linear-gradient(145deg, #173e67, #10284f);
+      box-shadow: 0 9px 18px rgba(16, 42, 79, .12);
+    }
+    .step:nth-of-type(even) { background: linear-gradient(145deg, #1677ca, #0756ad); }
+    .step:not(:last-child)::after {
+      content: ""; position: absolute; top: 50%; left: calc(100% + 8px);
+      width: 27px; height: 6px; border-radius: 8px; background: var(--teal);
+      transform: translateY(-50%);
+    }
+    .step:not(:last-child)::before {
+      content: ""; position: absolute; top: 50%; left: calc(100% + 27px);
+      width: 0; height: 0; border-top: 9px solid transparent;
+      border-bottom: 9px solid transparent; border-left: 10px solid var(--teal);
+      transform: translateY(-50%);
+    }
+    .step svg { width: 64px; height: 64px; stroke: white; }
+    .step span { font-size: clamp(.88rem, 2vw, 1.3rem); font-weight: 850; line-height: 1.1; }
+
+    .closing {
+      margin: 0 0 24px; padding: 12px 20px 14px; border-radius: 30px;
+      color: white; text-align: center; font-size: clamp(1.25rem, 3.6vw, 2.2rem);
+      font-weight: 800; font-style: italic; letter-spacing: -.025em;
+      background: linear-gradient(100deg, #0caaa5, #079995);
+      box-shadow: 0 9px 22px rgba(9, 159, 153, .13);
+    }
+    footer { position: relative; padding: 0 48px; text-align: center; font-size: .98rem; color: #1b2030; }
+    footer strong { font-weight: 850; }
+    footer a { color: inherit; text-decoration-color: rgba(16, 36, 75, .35); text-underline-offset: 3px; }
+    footer a:hover { color: var(--blue); }
+
+    @media (min-width: 900px) {
+      .page { padding-top: 42px; }
+      .topics { gap: 22px; }
+      .topic { grid-template-columns: 235px minmax(0, 1fr); }
+      .icon-panel { min-height: 180px; }
+    }
+    @media (max-width: 640px) {
+      .page { padding: 27px 17px 24px; }
+      .corner-top { width: 95px; height: 83px; }
+      .corner-bottom { width: 75px; height: 66px; }
+      .dots.top { top: 105px; right: 4px; transform: scale(.7); }
+      .dots.bottom { right: 3px; bottom: 18px; transform: scale(.7); }
+      header { padding-right: 16px; margin-bottom: 19px; }
+      h1 { font-size: clamp(2.15rem, 10.3vw, 3.25rem); }
+      .subtitle { max-width: 95%; font-size: clamp(1.18rem, 5.4vw, 1.6rem); }
+      .intro-grid { grid-template-columns: 1fr; gap: 5px; margin: 18px 0 23px; }
+      .r-visual { min-height: 128px; }
+      .r-orbit { width: 185px; height: 108px; border-width: 16px; }
+      .r-letter { font-size: 7.5rem; }
+      .intro-card { padding: 19px 20px 20px; border-radius: 25px; }
+      .intro-card::before { display: none; }
+      .pill-title { font-size: 1.6rem; padding: 5px 18px 7px; }
+      .intro-card p { font-size: 1.12rem; }
+      .topics { gap: 17px; }
+      .topic { grid-template-columns: 1fr; gap: 8px; }
+      .icon-panel { min-height: 122px; padding: 8px; border-radius: 22px; }
+      .icon-panel svg { height: 110px; width: 138px; }
+      .topic-content { border-radius: 20px; }
+      .topic h2 { font-size: 1.36rem; padding: 9px 16px; border-radius: 18px; }
+      .topic ul { padding: 10px 15px 13px 48px; }
+      .topic li { font-size: 1.04rem; line-height: 1.42; margin: 5px 0; }
+      .topic li::before { left: -27px; width: 12px; height: 12px; }
+      .process { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; margin: 25px 0 20px; }
+      .step { min-height: 125px; border-radius: 20px; }
+      .step svg { width: 52px; height: 52px; }
+      .step span { font-size: 1rem; }
+      .step:not(:last-child)::before, .step:not(:last-child)::after { display: none; }
+      .closing { border-radius: 22px; font-size: 1.28rem; padding: 12px 13px; }
+      footer { padding: 0 12px; font-size: .86rem; line-height: 1.6; }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .topic-content, .icon-panel, .step { transition: transform .22s ease, box-shadow .22s ease; }
+      .topic:hover .topic-content, .topic:hover .icon-panel { transform: translateY(-2px); box-shadow: var(--shadow); }
+      .step:hover { transform: translateY(-3px); }
+    }
+    @media print {
+      body { background: white; }
+      .page { width: 100%; padding: 20px; }
+      .topic, .intro-card, .step, .closing { break-inside: avoid; }
+      a { text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="corner corner-top" aria-hidden="true"></div>
+    <div class="corner corner-bottom" aria-hidden="true"></div>
+    <div class="dots top" aria-hidden="true"></div>
+    <div class="dots bottom" aria-hidden="true"></div>
+
+    <header>
+      <h1><span class="r-mark">R</span> en el desarrollo<br>científico</h1>
+      <div class="title-rule" aria-hidden="true"></div>
+      <p class="subtitle"><strong>Integrantes:</strong><br>Díaz Ramírez Natalia Zoé<br>Hernández Luna Ashley Guadalupe<br>Medina Macías César Emiliano<br>Zamudio Juárez Mauricio</p>
+    </header>
+
+    <section class="intro-grid" aria-labelledby="what-is-r">
+      <div class="r-visual" aria-hidden="true">
+        <div class="r-orbit"></div>
+        <span class="r-letter">R</span>
+      </div>
+      <div class="intro-card">
+        <h2 class="pill-title" id="what-is-r">¿Qué es R?</h2>
+        <p>Lenguaje gratuito y de código abierto, especializado en estadística y visualización de datos.</p>
+      </div>
+    </section>
+
+    <section class="topics" aria-label="Usos de R en el desarrollo científico">
+      <article class="topic">
+        <div class="icon-panel" aria-hidden="true">
+          <svg viewBox="0 0 180 145" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 15V128H151" stroke="#10264d" stroke-width="6" stroke-linecap="round"/>
+            <rect x="37" y="82" width="24" height="36" rx="3" fill="#1678cf"/>
+            <rect x="76" y="63" width="24" height="55" rx="3" fill="#1678cf"/>
+            <rect x="115" y="49" width="24" height="69" rx="3" fill="#1678cf"/>
+            <path d="M48 53L94 20L124 32L163 3" stroke="#10264d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="48" cy="53" r="9" fill="#e5f7f3" stroke="#10264d" stroke-width="5"/>
+            <circle cx="94" cy="20" r="9" fill="#e5f7f3" stroke="#10264d" stroke-width="5"/>
+            <circle cx="124" cy="32" r="9" fill="#e5f7f3" stroke="#10264d" stroke-width="5"/>
+            <circle cx="163" cy="3" r="9" fill="#e5f7f3" stroke="#10264d" stroke-width="5"/>
+            <circle cx="143" cy="98" r="27" fill="#fffdf8" stroke="#10264d" stroke-width="6"/>
+            <path d="M162 118L176 134" stroke="#13b7ad" stroke-width="10" stroke-linecap="round"/>
+            <path d="M162 118L176 134" stroke="#10264d" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="topic-content">
+          <h2>Análisis de datos</h2>
+          <ul>
+            <li>Organiza y limpia información.</li>
+            <li>Identifica patrones y tendencias.</li>
+            <li>Crea gráficas para comunicar resultados.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="topic">
+        <div class="icon-panel" aria-hidden="true">
+          <svg viewBox="0 0 180 145" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M23 91C19 48 48 15 86 10C108 7 129 15 144 31" stroke="#12b5a9" stroke-width="6" stroke-linecap="round"/>
+            <path d="M139 12L147 33L125 31" stroke="#12b5a9" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M158 55C168 91 151 126 121 138C96 148 68 141 50 123" stroke="#12b5a9" stroke-width="6" stroke-linecap="round"/>
+            <path d="M56 143L47 121L70 124" stroke="#12b5a9" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M90 40L100 49L113 47L119 61L132 68L127 82L132 96L119 104L113 119L98 116L86 124L75 113L60 111L59 96L49 84L57 71L58 56L74 53L82 41Z" fill="#1779c9" stroke="#10264d" stroke-width="5" stroke-linejoin="round"/>
+            <circle cx="91" cy="82" r="20" fill="#e1f6f2" stroke="#10264d" stroke-width="5"/>
+          </svg>
+        </div>
+        <div class="topic-content">
+          <h2>Optimización de procesos</h2>
+          <ul>
+            <li>Automatiza tareas repetitivas.</li>
+            <li>Compara alternativas para aprovechar recursos.</li>
+            <li>Ayuda a reducir tiempos y apoyar decisiones.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="topic">
+        <div class="icon-panel" aria-hidden="true">
+          <svg viewBox="0 0 180 145" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M72 8H108M80 8V51L39 120C34 130 40 138 51 138H129C140 138 146 130 141 120L100 51V8" stroke="#10264d" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M53 112C70 100 82 106 94 112C108 119 119 113 132 109L143 128C145 134 139 139 131 139H50C41 139 36 133 42 124L53 112Z" fill="#159bd0"/>
+            <circle cx="66" cy="111" r="5" fill="white"/><circle cx="89" cy="122" r="5" fill="white"/>
+            <circle cx="111" cy="111" r="5" fill="white"/><circle cx="92" cy="94" r="4" fill="#12b8ae"/>
+            <circle cx="112" cy="82" r="4" fill="#12b8ae"/><circle cx="78" cy="81" r="4" fill="#12b8ae"/>
+          </svg>
+        </div>
+        <div class="topic-content">
+          <h2>Aplicaciones científicas</h2>
+          <ul>
+            <li><strong>Salud:</strong> analizar estudios clínicos.</li>
+            <li><strong>Ambiente:</strong> observar cambios en el clima.</li>
+            <li><strong>Industria:</strong> evaluar calidad y producción.</li>
+          </ul>
+        </div>
+      </article>
+    </section>
+
+    <section class="process" aria-label="Proceso: datos, análisis, resultados y decisiones">
+      <div class="step">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="3.5">
+          <ellipse cx="32" cy="13" rx="19" ry="7"/><path d="M13 13V48C13 52 21 56 32 56S51 52 51 48V13"/><path d="M13 30C13 34 21 38 32 38S51 34 51 30M13 46C13 50 21 54 32 54S51 50 51 46"/>
+        </svg>
+        <span>DATOS</span>
+      </div>
+      <div class="step">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="5" stroke-linecap="round">
+          <circle cx="27" cy="26" r="17"/><path d="M40 40L55 55"/>
+        </svg>
+        <span>ANÁLISIS</span>
+      </div>
+      <div class="step">
+        <svg viewBox="0 0 64 64" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <rect x="7" y="39" width="13" height="18" rx="2"/><rect x="26" y="25" width="13" height="32" rx="2"/><rect x="45" y="9" width="13" height="48" rx="2"/>
+        </svg>
+        <span>RESULTADOS</span>
+      </div>
+      <div class="step">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round">
+          <path d="M27 6H37L40 14L47 17L55 14L60 23L54 29V36L60 42L55 51L47 48L40 51L37 59H27L24 51L17 48L9 51L4 42L10 36V29L4 23L9 14L17 17L24 14L27 6Z"/><circle cx="32" cy="32" r="10"/>
+        </svg>
+        <span>DECISIONES</span>
+      </div>
+    </section>
+
+
+    <footer>
+      <strong>Fuentes:</strong>
+      <a href="https://www.r-project.org/" target="_blank" rel="noopener noreferrer">R Project · r-project.org</a>
+      &nbsp;|&nbsp;
+      <a href="https://cran.r-project.org/" target="_blank" rel="noopener noreferrer">CRAN · cran.r-project.org</a>
+    </footer>
+  </main>
+</body>
+</html>
